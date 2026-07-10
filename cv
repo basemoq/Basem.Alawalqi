@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>باسم — مشرف معرض</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12141c;
+    --panel:#1a1d29;
+    --panel-2:#20drop;
+    --purple:#7c4dff;
+    --purple-soft:#7c4dff26;
+    --gold:#e8b84b;
+    --paper:#f5f3ec;
+    --slate:#8d96ae;
+    --line:rgba(255,255,255,0.09);
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Sans Arabic','Inter',sans-serif;
+    line-height:1.65;
+    overflow-x:hidden;
+  }
+  html[dir="ltr"] body{ font-family:'Inter','IBM Plex Sans Arabic',sans-serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em; }
+
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; }
+
+  /* signal bars motif */
+  .bars{ display:inline-flex; align-items:flex-end; gap:3px; height:14px; }
+  .bars span{ width:4px; background:var(--purple); border-radius:1px; display:block; }
+  .bars span:nth-child(1){ height:35%; }
+  .bars span:nth-child(2){ height:60%; }
+  .bars span:nth-child(3){ height:80%; }
+  .bars span:nth-child(4){ height:100%; background:var(--gold); }
+
+  /* header */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(18,20,28,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  header .wrap{ display:flex; align-items:center; justify-content:space-between; height:76px; }
+  .logo{ display:flex; align-items:center; gap:12px; }
+  .logo-mark{ width:40px; height:40px; }
+  .logo-name{ font-weight:600; font-size:15px; letter-spacing:0.02em; }
+  .logo-name small{ display:block; font-size:11px; color:var(--slate); font-weight:400; margin-top:2px;}
+
+  nav{ display:flex; align-items:center; gap:28px; }
+  nav a.navlink{ font-size:14px; color:var(--slate); transition:color .2s; }
+  nav a.navlink:hover{ color:var(--paper); }
+  .lang-btn{
+    border:1px solid var(--line); background:transparent; color:var(--paper);
+    padding:8px 16px; border-radius:100px; font-size:13px; cursor:pointer;
+    font-family:inherit; transition:border-color .2s, background .2s;
+  }
+  .lang-btn:hover{ border-color:var(--purple); background:var(--purple-soft); }
+  .lang-btn:focus-visible, a:focus-visible, button:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+  @media (max-width:720px){ nav .navlink{ display:none; } }
+
+  /* hero */
+  .hero{ padding:88px 0 64px; position:relative; }
+  .hero-grid{ display:grid; grid-template-columns:1.2fr 0.8fr; gap:56px; align-items:center; }
+  @media (max-width:860px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; color:var(--gold); text-transform:uppercase; letter-spacing:0.12em;
+    margin-bottom:22px; font-weight:600;
+  }
+  html[dir="rtl"] .eyebrow{ letter-spacing:0.02em; text-transform:none; }
+
+  h1{ font-size:52px; font-weight:700; line-height:1.15; margin-bottom:18px; }
+  @media (max-width:600px){ h1{ font-size:36px; } }
+  .role{ font-size:19px; color:var(--purple); font-weight:600; margin-bottom:18px; }
+  .pitch{ font-size:16px; color:var(--slate); max-width:520px; margin-bottom:34px; }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    padding:13px 26px; border-radius:100px; font-size:14px; font-weight:600;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .2s, opacity .2s;
+  }
+  .btn-primary{ background:var(--purple); color:#fff; }
+  .btn-ghost{ border:1px solid var(--line); color:var(--paper); }
+  .btn:hover{ transform:translateY(-2px); }
+  @media (prefers-reduced-motion:reduce){ .btn:hover{ transform:none; } }
+
+  /* gauge */
+  .gauge-wrap{ display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .gauge{ position:relative; width:260px; height:260px; }
+  .gauge svg{ width:100%; height:100%; transform:rotate(-90deg); }
+  .gauge-track{ fill:none; stroke:var(--line); stroke-width:14; }
+  .gauge-fill{ fill:none; stroke:var(--purple); stroke-width:14; stroke-linecap:round;
+    stroke-dasharray:691; stroke-dashoffset:691; transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1); }
+  .gauge-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .gauge-num{ font-size:42px; font-weight:700; color:var(--paper); }
+  .gauge-label{ font-size:12px; color:var(--slate); margin-top:6px; text-align:center; max-width:150px; }
+
+  /* sections */
+  section{ padding:72px 0; border-top:1px solid var(--line); }
+  .section-head{ margin-bottom:40px; }
+  .section-eyebrow{ font-size:12px; color:var(--gold); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+  html[dir="rtl"] .section-eyebrow{ text-transform:none; letter-spacing:0; }
+  h2{ font-size:30px; font-weight:700; }
+
+  /* about */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:48px; }
+  @media (max-width:800px){ .about-grid{ grid-template-columns:1fr; } }
+  .about-text p{ color:var(--slate); margin-bottom:16px; font-size:15.5px; }
+  .fact-list{ display:flex; flex-direction:column; gap:0; }
+  .fact{ display:flex; justify-content:space-between; padding:16px 0; border-bottom:1px solid var(--line); }
+  .fact:first-child{ padding-top:0; }
+  .fact-k{ color:var(--slate); font-size:14px; }
+  .fact-v{ font-weight:600; font-size:14px; }
+
+  /* stat cards */
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:44px; }
+  @media (max-width:800px){ .stat-grid{ grid-template-columns:repeat(2,1fr); } }
+  .stat-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:24px 20px; transition:border-color .25s, transform .25s;
+  }
+  .stat-card:hover{ border-color:var(--purple); transform:translateY(-3px); }
+  @media (prefers-reduced-motion:reduce){ .stat-card:hover{ transform:none; } }
+  .stat-num{ font-size:30px; font-weight:700; color:var(--gold); }
+  .stat-label{ font-size:13px; color:var(--slate); margin-top:8px; }
+
+  .project-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:30px; margin-bottom:20px;
+  }
+  .project-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:10px;}
+  .project-title{ font-size:19px; font-weight:700; }
+  .tag{ font-size:11px; color:var(--purple); border:1px solid var(--purple); border-radius:100px; padding:4px 12px; }
+  .project-desc{ color:var(--slate); font-size:15px; margin-bottom:16px; }
+  .project-points{ display:flex; flex-direction:column; gap:10px; }
+  .point{ display:flex; align-items:flex-start; gap:10px; font-size:14px; }
+  .point .bars{ margin-top:4px; flex-shrink:0; }
+
+  /* career path */
+  .path{ display:flex; flex-direction:column; gap:0; }
+  .path-item{ display:flex; gap:20px; padding:22px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+  .path-item:last-child{ border-bottom:none; }
+  .path-num{ font-family:'IBM Plex Mono',monospace; color:var(--slate); font-size:13px; padding-top:4px; min-width:26px; }
+  .path-item.current .path-num{ color:var(--gold); }
+  .path-title{ font-weight:600; font-size:16px; margin-bottom:4px; }
+  .path-item.current .path-title{ color:var(--gold); }
+  .path-desc{ color:var(--slate); font-size:14px; }
+
+  /* skills */
+  .skills-grid{ display:flex; flex-wrap:wrap; gap:10px; }
+  .skill-pill{
+    border:1px solid var(--line); border-radius:100px; padding:10px 18px; font-size:13.5px;
+    background:var(--panel);
+  }
+
+  /* footer/contact */
+  footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
+  .contact-grid{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px; }
+  .contact-cta h2{ margin-bottom:12px; }
+  .contact-cta p{ color:var(--slate); max-width:420px; }
+  .contact-links{ display:flex; flex-direction:column; gap:10px; font-size:14px; }
+  .contact-links .k{ color:var(--slate); font-size:12px; }
+  .foot-note{ margin-top:56px; padding-top:24px; border-top:1px solid var(--line); font-size:12.5px; color:var(--slate); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion:reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="19" stroke="#7c4dff" stroke-width="1.5"/>
+        <rect x="11" y="20" width="3.4" height="8" rx="1" fill="#7c4dff"/>
+        <rect x="16.3" y="16" width="3.4" height="12" rx="1" fill="#7c4dff"/>
+        <rect x="21.6" y="12" width="3.4" height="16" rx="1" fill="#7c4dff"/>
+        <rect x="26.9" y="8" width="3.4" height="20" rx="1" fill="#e8b84b"/>
+      </svg>
+      <div class="logo-name">
+        <span data-ar="باسم" data-en="Basem">باسم</span>
+        <small data-ar="مشرف معرض · زين" data-en="Showroom Supervisor · Zain">مشرف معرض · زين</small>
+      </div>
+    </div>
+    <nav>
+      <a class="navlink" href="#about" data-ar="نبذة" data-en="About">نبذة</a>
+      <a class="navlink" href="#achievements" data-ar="الإنجازات" data-en="Achievements">الإنجازات</a>
+      <a class="navlink" href="#path" data-ar="المسار المهني" data-en="Career Path">المسار المهني</a>
+      <a class="navlink" href="#skills" data-ar="المهارات" data-en="Skills">المهارات</a>
+      <a class="navlink" href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a>
+      <button class="lang-btn" id="langToggle" data-ar="English" data-en="عربي">English</button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="bars"><span></span><span></span><span></span><span></span></span>
+        <span data-ar="معرض WFW430 — الرياض الجنوب للاتصالات وتقنية المعلومات" data-en="Showroom WFW430 — Riyah Al-Janoub for Telecom &amp; IT">معرض WFW430 — الرياض الجنوب للاتصالات وتقنية المعلومات</span>
+      </div>
+      <h1 data-ar="أدير فريق مبيعات، وأحقق نتائج تُقاس." data-en="I run a sales floor, and I make the numbers move.">أدير فريق مبيعات، وأحقق نتائج تُقاس.</h1>
+      <div class="role" data-ar="مشرف معرض في زين — أستهدف الترقّي إلى مشرف مبيعات / مدير معرض" data-en="Showroom Supervisor at Zain — moving toward Sales Supervisor / Showroom Manager">مشرف معرض في زين — أستهدف الترقّي إلى مشرف مبيعات / مدير معرض</div>
+      <p class="pitch" data-ar="أشرف على معرض WFW430 منذ يناير 2022، بقيادة فريق من 5 مندوبي مبيعات، مع تركيز يومي على تحقيق المستهدفات، جودة خدمة العملاء، ورفع كفاءة الفريق." data-en="Supervising showroom WFW430 since January 2022, leading a team of 5 sales representatives, with a daily focus on hitting targets, service quality, and team performance.">أشرف على معرض WFW430 منذ يناير 2022، بقيادة فريق من 5 مندوبي مبيعات، مع تركيز يومي على تحقيق المستهدفات، جودة خدمة العملاء، ورفع كفاءة الفريق.</p>
+      <div class="cta-row">
+        <a href="#achievements" class="btn btn-primary" data-ar="شوف الإنجازات" data-en="See achievements">شوف الإنجازات</a>
+        <a href="#contact" class="btn btn-ghost" data-ar="تواصل معي" data-en="Get in touch">تواصل معي</a>
+      </div>
+    </div>
+    <div class="gauge-wrap">
+      <div class="gauge">
+        <svg viewBox="0 0 240 240">
+          <circle class="gauge-track" cx="120" cy="120" r="110"/>
+          <circle class="gauge-fill" id="gaugeCircle" cx="120" cy="120" r="110"/>
+        </svg>
+        <div class="gauge-center">
+          <div class="gauge-num mono" id="gaugeNum">0%</div>
+          <div class="gauge-label" data-ar="متوسط تحقيق المستهدف — 10 أشهر" data-en="Avg. target achievement — 10 months">متوسط تحقيق المستهدف — 10 أشهر</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-eyebrow" data-ar="نبذة" data-en="About">نبذة</div>
+      <h2 data-ar="مين باسم" data-en="Who I am">مين باسم</h2>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p data-ar="مشرف معرض في شركة الرياض الجنوب للاتصالات وتقنية المعلومات (مشغّل زين)، مسؤول عن التشغيل اليومي لمعرض WFW430: إدارة الفريق، متابعة المستهدفات، وضمان تجربة عميل متسقة." data-en="Showroom Supervisor at Riyah Al-Janoub for Telecommunications and IT (a Zain operator), responsible for the day-to-day running of showroom WFW430: team management, target tracking, and a consistent customer experience.">مشرف معرض في شركة الرياض الجنوب للاتصالات وتقنية المعلومات (مشغّل زين)، مسؤول عن التشغيل اليومي لمعرض WFW430: إدارة الفريق، متابعة المستهدفات، وضمان تجربة عميل متسقة.</p>
+        <p data-ar="قبل الانتقال الكامل للإشراف في مارس 2026، كنت أساهم كمندوب مبيعات ضمن نفس الفريق — خبرة ميدانية تعطيني فهم مباشر لتحديات المندوبين اللي أقودهم اليوم." data-en="Before moving fully into supervision in March 2026, I contributed as an individual sales rep on the same team — floor-level experience that informs how I lead the reps I manage today.">قبل الانتقال الكامل للإشراف في مارس 2026، كنت أساهم كمندوب مبيعات ضمن نفس الفريق — خبرة ميدانية تعطيني فهم مباشر لتحديات المندوبين اللي أقودهم اليوم.</p>
+      </div>
+      <div class="fact-list">
+        <div class="fact"><span class="fact-k" data-ar="المسمى الوظيفي" data-en="Title">المسمى الوظيفي</span><span class="fact-v" data-ar="مشرف معرض" data-en="Showroom Supervisor">مشرف معرض</span></div>
+        <div class="fact"><span class="fact-k" data-ar="جهة العمل" data-en="Employer">جهة العمل</span><span class="fact-v" data-ar="الرياض الجنوب للاتصالات (زين)" data-en="Riyah Al-Janoub (Zain)">الرياض الجنوب للاتصالات (زين)</span></div>
+        <div class="fact"><span class="fact-k" data-ar="المعرض" data-en="Showroom">المعرض</span><span class="fact-v mono">WFW430</span></div>
+        <div class="fact"><span class="fact-k" data-ar="بداية الإشراف" data-en="Supervising since">بداية الإشراف</span><span class="fact-v mono">Jan 2022</span></div>
+        <div class="fact"><span class="fact-k" data-ar="حجم الفريق" data-en="Team size">حجم الفريق</span><span class="fact-v" data-ar="5 مندوبي مبيعات" data-en="5 sales representatives">5 مندوبي مبيعات</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-eyebrow" data-ar="الأداء" data-en="Performance">الأداء</div>
+      <h2 data-ar="إنجازات معرض WFW430" data-en="WFW430 performance">إنجازات معرض WFW430</h2>
+    </div>
+
+    <div class="stat-grid reveal">
+      <div class="stat-card"><div class="stat-num mono">84.3%</div><div class="stat-label" data-ar="متوسط تحقيق المستهدف (10 أشهر)" data-en="Avg. target achievement (10 months)">متوسط تحقيق المستهدف (10 أشهر)</div></div>
+      <div class="stat-card"><div class="stat-num mono">101.4%</div><div class="stat-label" data-ar="أعلى تحقيق — ديسمبر 2025" data-en="Peak month — Dec 2025">أعلى تحقيق — ديسمبر 2025</div></div>
+      <div class="stat-card"><div class="stat-num mono">5</div><div class="stat-label" data-ar="مندوبي مبيعات تحت الإشراف" data-en="Sales reps supervised">مندوبي مبيعات تحت الإشراف</div></div>
+      <div class="stat-card"><div class="stat-num mono">10</div><div class="stat-label" data-ar="أشهر أداء موثّقة" data-en="Months of tracked performance">أشهر أداء موثّقة</div></div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-top">
+        <div class="project-title" data-ar="برنامج رفع أداء المعرض" data-en="Showroom performance turnaround">برنامج رفع أداء المعرض</div>
+        <span class="tag" data-ar="يوليو 2025 – يونيو 2026" data-en="Jul 2025 – Jun 2026">يوليو 2025 – يونيو 2026</span>
+      </div>
+      <p class="project-desc" data-ar="متابعة شهرية منتظمة لمؤشرات الأداء في معرض WFW430، مع تدخلات مباشرة لرفع نسبة تحقيق المستهدف والحفاظ على استقرار الأداء عبر الفريق." data-en="Ongoing monthly tracking of KPIs at showroom WFW430, with direct interventions to lift target achievement and keep performance stable across the team.">متابعة شهرية منتظمة لمؤشرات الأداء في معرض WFW430، مع تدخلات مباشرة لرفع نسبة تحقيق المستهدف والحفاظ على استقرار الأداء عبر الفريق.</p>
+      <div class="project-points">
+        <div class="point"><span class="bars"><span></span><span></span><span></span><span></span></span><span data-ar="رفع التحقيق من أدنى نقطة 69.6% إلى ذروة 101.4% خلال نفس الفترة المتابَعة" data-en="Lifted achievement from a low of 69.6% to a peak of 101.4% within the tracked period">رفع التحقيق من أدنى نقطة 69.6% إلى ذروة 101.4% خلال نفس الفترة المتابَعة</span></div>
+        <div class="point"><span class="bars"><span></span><span></span><span></span><span></span></span><span data-ar="تحقيق 100.3% في سبتمبر 2025، وهو ثاني أعلى شهر مسجّل" data-en="Hit 100.3% in September 2025, the second-highest month on record">تحقيق 100.3% في سبتمبر 2025، وهو ثاني أعلى شهر مسجّل</span></div>
+        <div class="point"><span class="bars"><span></span><span></span><span></span><span></span></span><span data-ar="انتقال كامل من دور مساهم فردي إلى مسؤولية إشرافية كاملة اعتبارًا من مارس 2026" data-en="Transitioned fully from an individual-contributor role to full supervisory responsibility as of March 2026">انتقال كامل من دور مساهم فردي إلى مسؤولية إشرافية كاملة اعتبارًا من مارس 2026</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-eyebrow" data-ar="التطلعات" data-en="Ambition">التطلعات</div>
+      <h2 data-ar="المسار المهني القادم" data-en="Where I'm headed">المسار المهني القادم</h2>
+    </div>
+    <div class="path reveal">
+      <div class="path-item current">
+        <div class="path-num mono">01</div>
+        <div><div class="path-title" data-ar="مشرف معرض — الحالي" data-en="Showroom Supervisor — Current">مشرف معرض — الحالي</div><div class="path-desc" data-ar="إدارة معرض WFW430 وفريق من 5 مندوبين، مع أداء موثّق يفوق 84% من المستهدف." data-en="Running showroom WFW430 and a team of 5, with documented performance averaging above 84% of target.">إدارة معرض WFW430 وفريق من 5 مندوبين، مع أداء موثّق يفوق 84% من المستهدف.</div></div>
+      </div>
+      <div class="path-item">
+        <div class="path-num mono">02</div>
+        <div><div class="path-title" data-ar="مشرف مبيعات / مدير معرض" data-en="Sales Supervisor / Showroom Manager">مشرف مبيعات / مدير معرض</div><div class="path-desc" data-ar="الهدف القادم المباشر — نطاق أوسع للمسؤولية عبر أكثر من معرض أو فريق أكبر." data-en="The next direct goal — broader responsibility across more than one showroom or a larger team.">الهدف القادم المباشر — نطاق أوسع للمسؤولية عبر أكثر من معرض أو فريق أكبر.</div></div>
+      </div>
+      <div class="path-item">
+        <div class="path-num mono">03</div>
+        <div><div class="path-title" data-ar="مدير مبيعات إقليمي" data-en="Regional Sales Manager">مدير مبيعات إقليمي</div><div class="path-desc" data-ar="الطموح على المدى الأطول." data-en="The longer-term ambition.">الطموح على المدى الأطول.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-eyebrow" data-ar="المهارات" data-en="Skills">المهارات</div>
+      <h2 data-ar="أدوات الشغل" data-en="What I work with">أدوات الشغل</h2>
+    </div>
+    <div class="skills-grid reveal">
+      <span class="skill-pill" data-ar="قيادة فريق مبيعات" data-en="Sales team leadership">قيادة فريق مبيعات</span>
+      <span class="skill-pill" data-ar="متابعة المستهدفات وتحقيقها" data-en="Target tracking &amp; achievement">متابعة المستهدفات وتحقيقها</span>
+      <span class="skill-pill" data-ar="خدمة العملاء" data-en="Customer service">خدمة العملاء</span>
+      <span class="skill-pill" data-ar="تشغيل المعارض" data-en="Retail floor operations">تشغيل المعارض</span>
+      <span class="skill-pill" data-ar="تقارير الأداء (Excel)" data-en="Performance reporting (Excel)">تقارير الأداء (Excel)</span>
+      <span class="skill-pill" data-ar="تدريب وتطوير المندوبين" data-en="Rep coaching &amp; development">تدريب وتطوير المندوبين</span>
+      <span class="skill-pill" data-ar="منتجات زين" data-en="Zain product knowledge">منتجات زين</span>
+      <span class="skill-pill" data-ar="التواصل بالعربية" data-en="Arabic communication">التواصل بالعربية</span>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="contact-grid reveal">
+      <div class="contact-cta">
+        <h2 data-ar="نتواصل؟" data-en="Let's talk">نتواصل؟</h2>
+        <p data-ar="مفتوح لفرص إشراف مبيعات وإدارة معارض." data-en="Open to sales supervision and showroom management opportunities.">مفتوح لفرص إشراف مبيعات وإدارة معارض.</p>
+      </div>
+      <div class="contact-links">
+        <div><div class="k" data-ar="البريد" data-en="Email">البريد</div><a href="mailto:name@example.com">name@example.com</a></div>
+        <div><div class="k" data-ar="الجوال" data-en="Phone">الجوال</div><a href="tel:+966500000000" dir="ltr">+966 5X XXX XXXX</a></div>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span data-ar="© 2026 باسم — مشرف معرض، زين" data-en="© 2026 Basem — Showroom Supervisor, Zain">© 2026 باسم — مشرف معرض، زين</span>
+      <span data-ar="معرض WFW430" data-en="Showroom WFW430">معرض WFW430</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // language toggle
+  const toggle = document.getElementById('langToggle');
+  const els = document.querySelectorAll('[data-ar]');
+  let lang = 'ar';
+  function applyLang(l){
+    lang = l;
+    document.documentElement.lang = l;
+    document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+    document.title = l === 'ar' ? 'باسم — مشرف معرض' : 'Basem — Showroom Supervisor';
+    els.forEach(el => { el.textContent = el.getAttribute('data-' + l); });
+    toggle.textContent = l === 'ar' ? toggle.getAttribute('data-ar') : toggle.getAttribute('data-en');
+  }
+  toggle.addEventListener('click', () => applyLang(lang === 'ar' ? 'en' : 'ar'));
+
+  // gauge animation
+  const circumference = 2 * Math.PI * 110;
+  const gaugeCircle = document.getElementById('gaugeCircle');
+  const gaugeNum = document.getElementById('gaugeNum');
+  const target = 84.3;
+  function runGauge(){
+    const offset = circumference - (target / 100) * circumference;
+    gaugeCircle.style.strokeDashoffset = offset;
+    let start = null;
+    const duration = 1400;
+    function step(ts){
+      if(!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      gaugeNum.textContent = (p * target).toFixed(1) + '%';
+      if(p < 1) requestAnimationFrame(step);
+      else gaugeNum.textContent = target + '%';
+    }
+    requestAnimationFrame(step);
+  }
+  window.addEventListener('load', runGauge);
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
